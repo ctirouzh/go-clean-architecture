@@ -24,8 +24,6 @@ func GetSqliteInstance() *sql.DB {
 
 			sqliteInstance = db
 		})
-	} else {
-		log.Fatal("sqlite3 instance already created.")
 	}
 
 	return sqliteInstance
