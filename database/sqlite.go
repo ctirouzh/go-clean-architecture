@@ -16,7 +16,7 @@ var (
 func GetSqliteInstance() *sql.DB {
 	if sqliteInstance == nil {
 		sqliteOnce.Do(func() {
-			db, err := sql.Open("sqlite3", "./my.db")
+			db, err := sql.Open("sqlite3", "./sqlite.db")
 			if err != nil {
 				log.Panic("error in establishing connection with sqlite3 database", err.Error())
 			}
