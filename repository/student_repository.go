@@ -3,7 +3,7 @@ package repository
 import (
 	"database/sql"
 
-	"github.com/tahadostifam/go-clean-architecture/model"
+	"github.com/tahadostifam/go-clean-architecture/entity"
 )
 
 type StudentRepository struct {
@@ -16,7 +16,7 @@ func NewStudentRepository(c *sql.DB) *StudentRepository {
 	}
 }
 
-func (s *StudentRepository) CreateStudent(student model.Student) error {
+func (s *StudentRepository) CreateStudent(student entity.Student) error {
 	stmt, prepareErr := s.dbClient.Prepare("insert into student(name, last_name, age, gender) values(?, ?, ?, ?)")
 	if prepareErr != nil {
 		return prepareErr
