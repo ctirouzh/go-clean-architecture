@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/tahadostifam/go-clean-architecture/config"
+	"github.com/tahadostifam/go-clean-architecture/app/config"
 	"github.com/tahadostifam/go-clean-architecture/database"
 )
 

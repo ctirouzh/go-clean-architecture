@@ -15,7 +15,7 @@ type Config struct {
 }
 
 func LoadConfigs() (*Config, error) {
-	fileByte, readFileErr := os.ReadFile("./config/config.json")
+	fileByte, readFileErr := os.ReadFile("./app/config/config.json")
 	if readFileErr != nil {
 		return nil, readFileErr
 	}
