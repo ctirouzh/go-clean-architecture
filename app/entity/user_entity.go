@@ -42,12 +42,12 @@ func (user User) IsStudent() bool {
 	return user.RoleType == USER_TYPE_STUDENT
 }
 
-func (user *User) BeforeCreate() {
+func (user *User) PrepareForCreate() {
 	user.ID = uuid.New().String()
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = time.Now()
 }
 
-func (user *User) BeforeUpdate() {
+func (user *User) PrepareForUpdate() {
 	user.UpdatedAt = time.Now()
 }
