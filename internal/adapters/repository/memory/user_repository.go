@@ -46,7 +46,7 @@ func (ur UserRepo) Create(username, email, password string, userType user.UserTy
 		Email:    email,
 		Type:     userType,
 	}
-	// Prepare the user for create (fills other properties...)
+	// Prepare the user for create (Fill other properties...)
 	user.PrepareForCreate()
 	ur.users[user.ID] = user
 	return nil

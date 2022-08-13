@@ -4,15 +4,18 @@ import (
 	"lms/internal/domain/user"
 )
 
-type AuthService struct {
+// Service is the auth usecase service struct
+type Service struct {
 	userRepo user.Repository
 }
 
-func NewAuthService(userRepo user.Repository) *AuthService {
-	return &AuthService{userRepo: userRepo}
+// NewService returns a pointer to auth service
+func NewService(userRepo user.Repository) *Service {
+	return &Service{userRepo: userRepo}
 }
 
-func (service *AuthService) SignUp(username, email, password string) error {
-	// This service only creates a new student user
+// SignUp creates a new student type user in user repository
+func (service *Service) SignUp(username, email, password string) error {
+	// business rule: only students can sign up...
 	return service.userRepo.Create(username, email, password, user.USER_TYPE_STUDENT)
 }
