@@ -32,8 +32,11 @@ func (ur UserRepo) Get(id uuid.UUID) (user.User, error) {
 func (ur UserRepo) Create(username, email, password string, userType user.UserType) error {
 	// Make sure user isn't already in repository
 	for _, usr := range ur.users {
-		if usr.Username == username || usr.Email == email {
-			return user.ErrUserAlreadyExist
+		if usr.Username == username {
+			return user.ErrUsernameAlreadyTaken
+		}
+		if usr.Email == email {
+			return user.ErrEmailAlreadyTaken
 		}
 	}
 	ur.Lock()

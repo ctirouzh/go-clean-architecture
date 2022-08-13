@@ -7,8 +7,9 @@ import (
 )
 
 var (
-	ErrUserNotFound     = errors.New("user not found")
-	ErrUserAlreadyExist = errors.New("user already exist")
+	ErrUserNotFound         = errors.New("user not found")
+	ErrUsernameAlreadyTaken = errors.New("username already taken")
+	ErrEmailAlreadyTaken    = errors.New("email already taken")
 )
 
 type Repository interface {
