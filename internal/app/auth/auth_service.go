@@ -5,13 +5,14 @@ import (
 )
 
 type AuthService struct {
-	userRepo user.UserRepository
+	userRepo user.Repository
 }
 
-func NewAuthService(userRepo user.UserRepository) *AuthService {
+func NewAuthService(userRepo user.Repository) *AuthService {
 	return &AuthService{userRepo: userRepo}
 }
 
 func (service *AuthService) SignUp(username, email, password string) error {
-	return service.userRepo.CreateUser(username, email, password)
+	// This service only creates a new student user
+	return service.userRepo.CreateUser(username, email, password, user.USER_TYPE_STUDENT)
 }
