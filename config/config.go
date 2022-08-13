@@ -14,10 +14,10 @@ type Config struct {
 	Server `json:"server"`
 }
 
-func LoadConfigs() (*Config, error) {
-	fileByte, readFileErr := os.ReadFile("./config/config.json")
-	if readFileErr != nil {
-		return nil, readFileErr
+func Parse() (*Config, error) {
+	fileByte, readErr := os.ReadFile("./config/config.json")
+	if readErr != nil {
+		return nil, readErr
 	}
 
 	var config Config

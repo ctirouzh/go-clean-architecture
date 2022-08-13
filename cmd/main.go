@@ -12,12 +12,12 @@ import (
 func main() {
 	server := gin.Default()
 
-	cfg, configsErr := config.LoadConfigs()
-	if configsErr != nil {
-		log.Fatal("failed to load config file", configsErr)
+	cfg, cfgErr := config.Parse()
+	if cfgErr != nil {
+		log.Fatal("failed to load config file", cfgErr)
 	}
 
 	addr := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
-	fmt.Printf("Server has listening on %s\n", addr)
+	log.Printf("server listening on %s\n", addr)
 	server.Run(addr)
 }

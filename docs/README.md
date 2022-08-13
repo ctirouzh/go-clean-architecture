@@ -108,3 +108,4 @@ A project that follows the clean architecture principles will be: [[2]](#refrenc
 # **Refrences**
 1. https://www.techtarget.com/searchapparchitecture/tip/A-primer-on-the-clean-architecture-pattern-and-its-principles
 2. https://itnext.io/golang-and-clean-architecture-19ae9aae5683
+3. https://pkritiotis.io/clean-architecture-in-golang/
