@@ -1,16 +1,16 @@
 package user
 
-import "github.com/tahadostifam/go-clean-architecture/app/entity"
+import "lms/internal/domain/user"
 
 type UserService struct {
-	userRepo entity.UserRepository
+	userRepo user.UserRepository
 }
 
-func NewUserService(userRepo entity.UserRepository) *UserService {
+func NewUserService(userRepo user.UserRepository) *UserService {
 	return &UserService{userRepo: userRepo}
 }
 
-func (service *UserService) GetUser(id string) (*entity.User, error) {
+func (service *UserService) GetUser(id string) (*user.User, error) {
 	return service.userRepo.GetUser(id)
 }
 func (service *UserService) CreateUser(username, email, password string) error {

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
+	"lms/config"
+
 	"github.com/gin-gonic/gin"
-	"github.com/tahadostifam/go-clean-architecture/app/config"
-	"github.com/tahadostifam/go-clean-architecture/database"
 )
 
 func main() {
@@ -16,11 +16,6 @@ func main() {
 	if configsErr != nil {
 		log.Fatal("failed to load config file", configsErr)
 	}
-
-	db := database.GetSqliteInstance()
-	defer db.Close()
-
-	// studentRepository := repository.NewStudentRepository(db)
 
 	addr := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
 	fmt.Printf("Server has listening on %s\n", addr)

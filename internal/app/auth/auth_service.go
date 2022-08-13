@@ -1,14 +1,14 @@
 package auth
 
 import (
-	"github.com/tahadostifam/go-clean-architecture/app/entity"
+	"lms/internal/domain/user"
 )
 
 type AuthService struct {
-	userRepo entity.UserRepository
+	userRepo user.UserRepository
 }
 
-func NewAuthService(userRepo entity.UserRepository) *AuthService {
+func NewAuthService(userRepo user.UserRepository) *AuthService {
 	return &AuthService{userRepo: userRepo}
 }
 

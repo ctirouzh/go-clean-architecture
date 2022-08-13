@@ -8,8 +8,10 @@ Clean architecture is yet another one of these architectural styles, though it m
 Clean architecture has four layers. When working with clean architecture, the dependencies in an application are designed for stability. This means that less-stable components should only depend on components that are more stable. The clean architecture pattern also dictates that the more stable a component is, the more abstract component types it should contain. In the end, code that follows this pattern is decoupled, reusable and easier to maintain. It separates the software elements as following schematic layered ring: 
 
 <p>
- <img src="layers.png" width=600>
+ <img src="layers.png" width=400>
+ <img src="clean-arch-1.jpg" width=400>
 </p> 
+<p> <img src="clean-arch-2.png" width=800> </p>
 
 ## *Domain layer*
 
