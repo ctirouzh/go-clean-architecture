@@ -14,5 +14,5 @@ func NewAuthService(userRepo user.Repository) *AuthService {
 
 func (service *AuthService) SignUp(username, email, password string) error {
 	// This service only creates a new student user
-	return service.userRepo.CreateUser(username, email, password, user.USER_TYPE_STUDENT)
+	return service.userRepo.Create(username, email, password, user.USER_TYPE_STUDENT)
 }

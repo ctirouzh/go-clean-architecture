@@ -29,3 +29,20 @@ func (user User) IsTeacher() bool {
 func (user User) IsStudent() bool {
 	return user.Type == USER_TYPE_STUDENT
 }
+
+func (user User) IsVerified() bool {
+	return user.Verified
+}
+
+func (user User) IsBanned() bool {
+	return user.Banned
+}
+
+func (user *User) PrepareForCreate() {
+	user.ID = uuid.New()
+	user.Verified = false
+	user.Banned = false
+	now := time.Now()
+	user.CreatedAt = now
+	user.UpdatedAt = now
+}
