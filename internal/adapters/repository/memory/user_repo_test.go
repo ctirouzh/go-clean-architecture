@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestUserRepo(t *testing.T) {
@@ -13,17 +14,16 @@ func TestUserRepo(t *testing.T) {
 	password := "secret"
 	userRepo := NewUserRepo()
 	usr, createErr := userRepo.Create(username, email, password, user.USER_TYPE_STUDENT)
-	if createErr != nil { // username or email already taken
-		t.Fatal("failed to initialize the test")
+	if !assert.Equal(t, nil, createErr) {
+		// username or email already taken
+		t.Fatal("cannot create test user")
 	}
 
-	type testCase struct {
+	testCases := []struct {
 		name     string
 		id       uuid.UUID
 		expected error
-	}
-
-	testCases := []testCase{
+	}{
 		{
 			name:     "get and delete an existing user in repository",
 			id:       usr.ID,
@@ -38,29 +38,16 @@ func TestUserRepo(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			found, getErr := userRepo.Get(tc.id)
-			if getErr != tc.expected {
-				t.Errorf("expected %v, got %v error", tc.expected, getErr)
-			}
+			assert.Equal(t, tc.expected, getErr)
 			if found != nil {
-				if !found.IsStudent() {
-					t.Errorf("expected a student, got %s", found.Type.String())
-				}
-				if found.IsVerified() {
-					t.Error("expected an unverefied user, got a verified one")
-				}
-				if found.IsBanned() {
-					t.Error("expected a permitted user, got a banned one")
-				}
-				if found.Username != usr.Username {
-					t.Errorf("expected %s, got %s", usr.Username, found.Username)
-				}
-				if found.Email != usr.Email {
-					t.Errorf("expected %s, got %s", usr.Email, found.Email)
-				}
+				assert.Truef(t, found.IsStudent(), "expected a student, got %s", found.Type.String())
+				assert.False(t, found.IsVerified(), "expected an unverefied user, got a verified one")
+				assert.False(t, found.IsBanned(), "expected a permitted user, got a banned one")
+				assert.Equal(t, usr.Username, found.Username)
+				assert.Equal(t, usr.Email, found.Email)
 			}
-			if deleteErr := userRepo.Delete(usr.ID); deleteErr != tc.expected {
-				t.Errorf("expected %s, got %s", tc.expected, deleteErr)
-			}
+			deleteErr := userRepo.Delete(usr.ID)
+			assert.Equal(t, tc.expected, deleteErr)
 		})
 	}
 }

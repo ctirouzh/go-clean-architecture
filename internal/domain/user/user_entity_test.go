@@ -9,13 +9,11 @@ import (
 
 func TestUserEntity_CheckUserType(t *testing.T) {
 
-	type testCase struct {
+	testCases := []struct {
 		name     string
 		user     User
 		expected []bool
-	}
-
-	testCases := []testCase{
+	}{
 		{
 			name:     "call {IsAdmin,IsTecher,IsStudent} on an admin user type",
 			user:     User{Type: USER_TYPE_ADMIN},

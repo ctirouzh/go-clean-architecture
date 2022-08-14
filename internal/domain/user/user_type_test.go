@@ -7,13 +7,12 @@ import (
 )
 
 func TestUserType_String(t *testing.T) {
-	type testCase struct {
+
+	testCases := []struct {
 		name     string
 		user     User
 		expected string
-	}
-
-	testCases := []testCase{
+	}{
 		{
 			name:     "get the string of student type",
 			user:     User{Type: USER_TYPE_STUDENT},
@@ -42,13 +41,12 @@ func TestUserType_String(t *testing.T) {
 }
 
 func TestUserType_Index(t *testing.T) {
-	type testCase struct {
+
+	testCases := []struct {
 		name     string
 		user     User
 		expected int
-	}
-
-	testCases := []testCase{
+	}{
 		{
 			name:     "get the index of student type",
 			user:     User{Type: USER_TYPE_STUDENT},
@@ -62,12 +60,12 @@ func TestUserType_Index(t *testing.T) {
 			user:     User{Type: USER_TYPE_ADMIN},
 			expected: int(1),
 		}, {
-			name:     "calling the index method of an unknown user type returns -1",
+			name:     "call the index method on an unknown user type",
 			user:     User{Type: -53},
 			expected: int(-1),
 		},
 		{
-			name:     "calling the index method of an unknown user type returns -1",
+			name:     "call the index method of an unknown user type",
 			user:     User{Type: 53},
 			expected: int(-1),
 		},
