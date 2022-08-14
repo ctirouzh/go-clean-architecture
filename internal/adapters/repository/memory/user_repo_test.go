@@ -15,7 +15,8 @@ func TestUserRepo(t *testing.T) {
 	userRepo := NewUserRepo()
 	usr, createErr := userRepo.Create(username, email, password, user.USER_TYPE_STUDENT)
 	if !assert.Equal(t, nil, createErr) {
-		// username or email already taken
+		// 1. username or email already taken
+		// 2. SetPassword failed
 		t.Fatal("cannot create test user")
 	}
 
@@ -40,11 +41,11 @@ func TestUserRepo(t *testing.T) {
 			found, getErr := userRepo.Get(tc.id)
 			assert.Equal(t, tc.expected, getErr)
 			if found != nil {
+				assert.Equal(t, usr, found)
 				assert.Truef(t, found.IsStudent(), "expected a student, got %s", found.Type.String())
+				assert.True(t, found.IsPasswordVerified(password))
 				assert.False(t, found.IsVerified(), "expected an unverefied user, got a verified one")
 				assert.False(t, found.IsBanned(), "expected a permitted user, got a banned one")
-				assert.Equal(t, usr.Username, found.Username)
-				assert.Equal(t, usr.Email, found.Email)
 			}
 			deleteErr := userRepo.Delete(usr.ID)
 			assert.Equal(t, tc.expected, deleteErr)
