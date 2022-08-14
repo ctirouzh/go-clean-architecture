@@ -11,7 +11,7 @@ type SignUpRequest struct {
 	Password string `json:"password"`
 }
 
-type SignUpResponse struct {
+type UserDTO struct {
 	ID        string    `json:"id"`
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
@@ -22,7 +22,7 @@ type SignUpResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (res *SignUpResponse) Prepare(user *user.User) {
+func (res *UserDTO) Prepare(user *user.User) {
 	res.ID = user.ID.String()
 	res.Username = user.Username
 	res.Email = user.Email
