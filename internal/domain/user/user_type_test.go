@@ -1,6 +1,10 @@
 package user
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
 
 func TestUserType_String(t *testing.T) {
 	type testCase struct {
@@ -32,9 +36,7 @@ func TestUserType_String(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := tc.user.Type.String()
-			if got != tc.expected {
-				t.Errorf("expected %q, got %q", tc.expected, got)
-			}
+			assert.Equal(t, tc.expected, got)
 		})
 	}
 }
@@ -73,9 +75,7 @@ func TestUserType_Index(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			got := tc.user.Type.Index()
-			if got != tc.expected {
-				t.Errorf("expected %d, got %d", tc.expected, got)
-			}
+			assert.Equal(t, tc.expected, got)
 		})
 	}
 
