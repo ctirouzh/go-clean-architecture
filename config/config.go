@@ -15,13 +15,13 @@ type Config struct {
 }
 
 func Parse() (*Config, error) {
-	fileByte, readErr := os.ReadFile("./config/config.json")
+	file, readErr := os.ReadFile("./config/config.json")
 	if readErr != nil {
 		return nil, readErr
 	}
 
 	var config Config
-	if err := json.Unmarshal(fileByte, &config); err != nil {
+	if err := json.Unmarshal(file, &config); err != nil {
 		return nil, err
 	}
 
