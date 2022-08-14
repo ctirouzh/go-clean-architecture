@@ -52,3 +52,35 @@ func TestUserEntity_PrepareForCreate(t *testing.T) {
 	assert.False(t, usr.CreatedAt.IsZero())
 	assert.False(t, usr.UpdatedAt.IsZero())
 }
+
+func TestUserEntity_GenerateHash(t *testing.T) {
+	testCases := []struct {
+		name     string
+		password string
+		expected error
+	}{
+		{
+			name:     "non-empty password",
+			password: "secret",
+			expected: nil,
+		}, {
+			name:     "empty password",
+			password: "",
+			expected: ErrEmptyUserPassword,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			hash, gotErr := GenerateHashFromPassword(tc.password)
+			assert.Equal(t, tc.expected, gotErr)
+			usr := User{PasswordHash: hash}
+			switch gotErr {
+			case nil:
+				assert.True(t, usr.IsPasswordVerified(tc.password))
+				assert.False(t, usr.IsPasswordVerified("jskla9"))
+			default:
+				assert.False(t, usr.IsPasswordVerified(tc.password))
+			}
+		})
+	}
+}

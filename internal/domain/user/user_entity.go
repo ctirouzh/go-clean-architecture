@@ -1,9 +1,15 @@
 package user
 
 import (
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
+)
+
+var (
+	ErrEmptyUserPassword = errors.New("password cannot be empty")
 )
 
 type User struct {
@@ -38,6 +44,10 @@ func (user User) IsBanned() bool {
 	return user.Banned
 }
 
+func (user User) IsPasswordVerified(password string) bool {
+	return bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) == nil
+}
+
 func (user *User) PrepareForCreate() {
 	user.ID = uuid.New()
 	user.Verified = false
@@ -45,4 +55,15 @@ func (user *User) PrepareForCreate() {
 	now := time.Now()
 	user.CreatedAt = now
 	user.UpdatedAt = now
+}
+
+func GenerateHashFromPassword(password string) (string, error) {
+	if len(password) == 0 {
+		return "", ErrEmptyUserPassword
+	}
+	b, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
 }

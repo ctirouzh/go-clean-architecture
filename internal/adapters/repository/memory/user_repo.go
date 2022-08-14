@@ -35,10 +35,15 @@ func (ur *UserRepo) Create(username, email, password string, userType user.UserT
 	//TODO: Make sure user isn't already in repository
 	ur.mutex.Lock()
 	defer ur.mutex.Unlock()
+	hashedPassword, err := user.GenerateHashFromPassword(password)
+	if err != nil {
+		return nil, err
+	}
 	newUser := &user.User{
-		Username: username,
-		Email:    email,
-		Type:     userType,
+		Username:     username,
+		Email:        email,
+		PasswordHash: hashedPassword,
+		Type:         userType,
 	}
 	// Prepare the user for create (Fill other properties...)
 	newUser.PrepareForCreate()
