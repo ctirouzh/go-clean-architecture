@@ -15,7 +15,7 @@ func NewService(userRepo user.Repository) *Service {
 }
 
 // SignUp creates a new student type user in user repository
-func (service *Service) SignUp(username, email, password string) error {
+func (service *Service) SignUp(username, email, password string) (*user.User, error) {
 	// business rule: only students can sign up...
 	return service.userRepo.Create(username, email, password, user.USER_TYPE_STUDENT)
 }

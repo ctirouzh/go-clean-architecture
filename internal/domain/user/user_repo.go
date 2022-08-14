@@ -14,6 +14,6 @@ var (
 
 type Repository interface {
 	Get(id uuid.UUID) (*User, error)
-	Create(username, email, password string, userType UserType) error
+	Create(username, email, password string, userType UserType) (*User, error)
 	Delete(id uuid.UUID) error
 }

@@ -51,21 +51,21 @@ func TestUserEntity_PrepareForCreate(t *testing.T) {
 	usr := User{}
 	usr.PrepareForCreate()
 	if _, err := uuid.Parse(usr.ID.String()); err != nil {
-		t.Errorf("expected a valid uuid, got invalid one")
+		t.Error("expected a valid uuid, got invalid one")
 	}
 
 	if usr.CreatedAt.IsZero() {
-		t.Errorf("expected a timestamp, got zero CreatedAt")
+		t.Error("expected a timestamp, got zero CreatedAt")
 	}
 
 	if usr.UpdatedAt.IsZero() {
-		t.Errorf("expected a timestamp, got zero UpdatedAt")
+		t.Error("expected a timestamp, got zero UpdatedAt")
 	}
 
 	if usr.IsVerified() {
-		t.Errorf("expected an unverified user, got a verified one")
+		t.Error("expected an unverified user, got a verified one")
 	}
 	if usr.IsBanned() {
-		t.Errorf("expected a permitted user, got a banned one")
+		t.Error("expected a permitted user, got a banned one")
 	}
 }
