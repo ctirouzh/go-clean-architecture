@@ -53,7 +53,7 @@ func TestUserEntity_PrepareForCreate(t *testing.T) {
 	assert.False(t, usr.UpdatedAt.IsZero())
 }
 
-func TestUserEntity_GenerateHash(t *testing.T) {
+func TestUserEntity_SetPassword(t *testing.T) {
 	testCases := []struct {
 		name     string
 		password string
@@ -71,9 +71,9 @@ func TestUserEntity_GenerateHash(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			hash, gotErr := GenerateHashFromPassword(tc.password)
+			usr := User{}
+			gotErr := usr.SetPassword(tc.password)
 			assert.Equal(t, tc.expected, gotErr)
-			usr := User{PasswordHash: hash}
 			switch gotErr {
 			case nil:
 				assert.True(t, usr.IsPasswordVerified(tc.password))
