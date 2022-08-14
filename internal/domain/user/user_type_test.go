@@ -26,7 +26,7 @@ func TestUserType_String(t *testing.T) {
 			user:     User{Type: USER_TYPE_ADMIN},
 			expected: "ADMIN",
 		}, {
-			name:     "calling the String method of an unknown user type returns \"UNKNOWN\"",
+			name:     "call the String method of an unknown user type",
 			user:     User{Type: -53},
 			expected: "UNKNOWN",
 		},
