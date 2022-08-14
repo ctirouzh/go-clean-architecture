@@ -36,6 +36,6 @@ func (ctrl *Auth) SignUp(c *gin.Context) {
 	}
 
 	var res *SignUpResponse
-	res.PrepareFrom(usr)
+	res.Prepare(usr)
 	c.JSON(http.StatusOK, gin.H{"data": res})
 }

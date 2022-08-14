@@ -22,7 +22,7 @@ type SignUpResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (res *SignUpResponse) PrepareFrom(user *user.User) {
+func (res *SignUpResponse) Prepare(user *user.User) {
 	res.ID = user.ID.String()
 	res.Username = user.Username
 	res.Email = user.Email
