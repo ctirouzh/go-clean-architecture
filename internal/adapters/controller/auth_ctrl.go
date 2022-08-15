@@ -3,7 +3,6 @@ package controller
 import (
 	"lms/internal/app/auth"
 	"lms/internal/domain/user"
-	"lms/internal/pkg/apperr"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,7 +20,7 @@ func (ctrl *Auth) SignUp(c *gin.Context) {
 
 	var req SignUpRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.Error(apperr.New(http.StatusBadRequest, err.Error()))
+		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
@@ -31,11 +30,11 @@ func (ctrl *Auth) SignUp(c *gin.Context) {
 		if err == user.ErrEmailAlreadyTaken || err == user.ErrUsernameAlreadyTaken {
 			status = http.StatusConflict
 		}
-		c.Error(apperr.New(status, err.Error()))
+		c.AbortWithError(status, err)
 		return
 	}
 
-	var res *UserDTO
-	res.Prepare(usr)
+	var res UserDTO
+	res.Prepare(*usr)
 	c.JSON(http.StatusOK, gin.H{"data": res})
 }

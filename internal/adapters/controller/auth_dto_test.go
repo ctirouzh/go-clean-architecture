@@ -11,7 +11,7 @@ import (
 func TestAuthDTO_PrepareUserDTO(t *testing.T) {
 	usr := sample.NewFakeUserEntity(user.USER_TYPE_STUDENT, false, false)
 	usrDTO := UserDTO{}
-	usrDTO.Prepare(&usr)
+	usrDTO.Prepare(usr)
 	assert.Equal(t, usrDTO.ID, usr.ID.String())
 	assert.Equal(t, usrDTO.Username, usr.Username)
 	assert.Equal(t, usrDTO.Email, usr.Email)

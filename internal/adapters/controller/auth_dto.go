@@ -6,9 +6,9 @@ import (
 )
 
 type SignUpRequest struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Username string `json:"username" binding:"required"`
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
 }
 
 type UserDTO struct {
@@ -22,13 +22,13 @@ type UserDTO struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (res *UserDTO) Prepare(user *user.User) {
-	res.ID = user.ID.String()
-	res.Username = user.Username
-	res.Email = user.Email
-	res.Type = user.Type.String()
-	res.Verified = user.Verified
-	res.Banned = user.Banned
-	res.CreatedAt = user.CreatedAt
-	res.UpdatedAt = user.UpdatedAt
+func (res *UserDTO) Prepare(usr user.User) {
+	res.ID = usr.ID.String()
+	res.Username = usr.Username
+	res.Email = usr.Email
+	res.Type = usr.Type.String()
+	res.Verified = usr.Verified
+	res.Banned = usr.Banned
+	res.CreatedAt = usr.CreatedAt
+	res.UpdatedAt = usr.UpdatedAt
 }
