@@ -19,7 +19,7 @@ func TestAuthController_SignUp(t *testing.T) {
 	userRepo := memory.NewUserRepo()
 	authService := auth.NewService(userRepo)
 	authCtrl := NewAuthController(authService)
-	// testCases
+	// testCases: TODO--> Consider EmailAlreadyTaken and UsernameAlreadyTaken errors
 	testCases := []struct {
 		name string
 		form SignUpRequest
