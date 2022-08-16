@@ -24,3 +24,13 @@ func NewFakeUserEntity(userType user.UserType, verified, banned bool) user.User 
 	usr.SetPassword("secret")
 	return usr
 }
+
+// NewFakeUsername returns a new fake username string
+func NewFakeUsername() string {
+	return gofakeit.Username()
+}
+
+// NewFakeUsername returns a new fake email string
+func NewFakeEmail() string {
+	return gofakeit.Email()
+}
