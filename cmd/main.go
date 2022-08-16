@@ -8,6 +8,7 @@ import (
 	"lms/internal/adapters/controller"
 	"lms/internal/adapters/repository/memory"
 	"lms/internal/app/auth"
+	"lms/internal/ports/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,8 +24,7 @@ func main() {
 	authCtrl := controller.NewAuthController(authService)
 
 	r := gin.Default()
-	auth := r.Group("/api/auth")
-	auth.POST("/signup", authCtrl.SignUp)
+	http.InitAuthRouter(r, authCtrl)
 
 	addr := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
 	log.Printf("server listening on %s\n", addr)
