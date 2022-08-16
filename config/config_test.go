@@ -1,12 +1,19 @@
 package config
 
 import (
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestConfig_Parse(t *testing.T) {
+	// Prepare for test
+	emptyConfigFile, err := os.Create("./../tmp/empty_config.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	emptyConfigFile.Close()
 	type Want struct {
 		err    error
 		config *Config
@@ -41,9 +48,9 @@ func TestConfig_Parse(t *testing.T) {
 			},
 		},
 		{
-			name:         "invalid file format",
+			name:         "empty config file",
 			relativePath: "./../tmp/",
-			fileName:     "example.txt",
+			fileName:     emptyConfigFile.Name(),
 			want: Want{
 				err:    ErrFailedToUnmarshal,
 				config: nil,
