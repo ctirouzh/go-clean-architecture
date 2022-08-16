@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	cfg, cfgErr := config.Parse()
+	cfg, cfgErr := config.Parse("./config/config.json")
 	if cfgErr != nil {
 		log.Fatal("failed to load config file", cfgErr)
 	}

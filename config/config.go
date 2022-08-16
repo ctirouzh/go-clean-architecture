@@ -14,8 +14,8 @@ type Config struct {
 	Server `json:"server"`
 }
 
-func Parse() (*Config, error) {
-	file, readErr := os.ReadFile("./config/config.json")
+func Parse(path string) (*Config, error) {
+	file, readErr := os.ReadFile(path)
 	if readErr != nil {
 		return nil, readErr
 	}
