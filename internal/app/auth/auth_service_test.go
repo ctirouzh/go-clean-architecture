@@ -19,7 +19,7 @@ func TestAuthService_NewService(t *testing.T) {
 }
 
 func TestAuthService_SignUp(t *testing.T) {
-	// mock domain user.Repository Interface implementation
+	// use domain user.Repository Interface mock implementation
 	userRepo := user.NewMockRepository(make(map[uuid.UUID]*user.User))
 	authService := NewService(userRepo)
 
@@ -35,5 +35,4 @@ func TestAuthService_SignUp(t *testing.T) {
 	assert.Equal(t, email, usr.Email)
 	assert.Equal(t, user.USER_TYPE_STUDENT, usr.Type)
 	assert.True(t, usr.IsPasswordVerified(password))
-
 }
