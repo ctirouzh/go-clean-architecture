@@ -35,4 +35,8 @@ func TestAuthService_SignUp(t *testing.T) {
 	assert.Equal(t, email, usr.Email)
 	assert.Equal(t, user.USER_TYPE_STUDENT, usr.Type)
 	assert.True(t, usr.IsPasswordVerified(password))
+
+	_, findErr := authService.userRepo.Get(usr.ID)
+	assert.Empty(t, findErr)
+
 }
