@@ -46,6 +46,8 @@ func TestUserRepo(t *testing.T) {
 				assert.True(t, found.IsPasswordVerified(password))
 				assert.False(t, found.IsVerified(), "expected an unverefied user, got a verified one")
 				assert.False(t, found.IsBanned(), "expected a permitted user, got a banned one")
+				_, getByUsernameErr := userRepo.GetByUsername(found.Username)
+				assert.Empty(t, getByUsernameErr)
 			}
 			deleteErr := userRepo.Delete(usr.ID)
 			assert.Equal(t, tc.expected, deleteErr)
