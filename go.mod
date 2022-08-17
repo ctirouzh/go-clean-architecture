@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/brianvoe/gofakeit/v6 v6.18.0
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.8.1
 	github.com/google/uuid v1.3.0
 	github.com/stretchr/testify v1.7.1
