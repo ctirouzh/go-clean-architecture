@@ -14,6 +14,7 @@ var (
 
 type Repository interface {
 	Get(id uuid.UUID) (*User, error)
+	GetByUsername(username string) (*User, error)
 	Create(username, email, password string, userType UserType) (*User, error)
 	Delete(id uuid.UUID) error
 }
@@ -32,6 +33,15 @@ func (repo *MockRepository) Get(id uuid.UUID) (*User, error) {
 		return nil, ErrUserNotFound
 	}
 	return usr, nil
+}
+
+func (repo *MockRepository) GetByUsername(username string) (*User, error) {
+	for _, usr := range repo.users {
+		if usr.Username == username {
+			return usr, nil
+		}
+	}
+	return nil, ErrUserNotFound
 }
 
 func (repo *MockRepository) Create(username, email, password string, userType UserType) (*User, error) {

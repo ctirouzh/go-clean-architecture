@@ -10,8 +10,6 @@ import (
 )
 
 var (
-	ErrUserNotVerified         = errors.New("user not verified")
-	ErrBannedUser              = errors.New("user is banned")
 	ErrUnexpectedSigningMethod = errors.New("unexpected token signing method")
 	ErrInvalidToken            = errors.New("invalid token")
 	ErrInvalidTokenClaims      = errors.New("invalid token claims")
@@ -41,13 +39,6 @@ func NewJwtManager(config config.JWT) *JwtManager {
 
 // Generate generates and signs new access token for a user.
 func (m *JwtManager) Generate(usr *user.User) (string, error) {
-
-	if !usr.IsVerified() {
-		return "", ErrUserNotVerified
-	}
-	if usr.IsBanned() {
-		return "", ErrBannedUser
-	}
 
 	claims := UserClaims{
 		StandardClaims: jwt.StandardClaims{

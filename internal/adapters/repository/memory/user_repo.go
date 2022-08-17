@@ -30,6 +30,17 @@ func (ur *UserRepo) Get(id uuid.UUID) (*user.User, error) {
 	return nil, user.ErrUserNotFound
 }
 
+func (ur *UserRepo) GetByUsername(username string) (*user.User, error) {
+	ur.mutex.RLock()
+	defer ur.mutex.RUnlock()
+	for _, usr := range ur.users {
+		if usr.Username == username {
+			return usr, nil
+		}
+	}
+	return nil, user.ErrUserNotFound
+}
+
 // Create will add a new user to the repository
 func (ur *UserRepo) Create(username, email, password string, userType user.UserType) (*user.User, error) {
 	//TODO: Make sure user isn't already in repository

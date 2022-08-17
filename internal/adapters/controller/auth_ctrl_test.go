@@ -3,11 +3,13 @@ package controller
 import (
 	"bytes"
 	"encoding/json"
+	"lms/config"
 	"lms/internal/adapters/repository/memory"
 	"lms/internal/app/auth"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -17,7 +19,8 @@ import (
 func TestAuthController_SignUp(t *testing.T) {
 	// Prepare auth controller dependencies.
 	userRepo := memory.NewUserRepo()
-	authService := auth.NewService(userRepo)
+	jwtManager := auth.NewJwtManager(config.JWT{SecretKey: "secret", TTL: time.Minute})
+	authService := auth.NewService(userRepo, jwtManager)
 	authCtrl := NewAuthController(authService)
 	// testCases: TODO--> Consider EmailAlreadyTaken and UsernameAlreadyTaken errors
 	testCases := []struct {

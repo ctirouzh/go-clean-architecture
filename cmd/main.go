@@ -20,7 +20,8 @@ func main() {
 	}
 
 	userRepo := memory.NewUserRepo()
-	authService := auth.NewService(userRepo)
+	jwtManager := auth.NewJwtManager(cfg.JWT)
+	authService := auth.NewService(userRepo, jwtManager)
 	authCtrl := controller.NewAuthController(authService)
 
 	r := gin.Default()

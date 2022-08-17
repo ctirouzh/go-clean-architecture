@@ -33,21 +33,12 @@ func TestJWTManager_Generate(t *testing.T) {
 		wantVerHasErr bool
 	}{
 		{
-			name:          "verified and permitted user",
+			name:          "valid user",
 			user:          sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, true, false),
 			wantGenErr:    nil,
 			wantVerHasErr: false,
-		}, {
-			name:          "unverified user",
-			user:          sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, false, false),
-			wantGenErr:    ErrUserNotVerified,
-			wantVerHasErr: true,
-		}, {
-			name:          "verified/banned user",
-			user:          sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, true, true),
-			wantGenErr:    ErrBannedUser,
-			wantVerHasErr: true,
 		},
+		//TODO: think about a better scenario or test case structure.
 	}
 
 	for _, tc := range testCases {
