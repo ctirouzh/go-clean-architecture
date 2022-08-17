@@ -1,12 +1,18 @@
 package auth
 
 import (
-	"fmt"
+	"errors"
 	"lms/config"
 	"lms/internal/domain/user"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
+)
+
+var (
+	ErrUnexpectedSigningMethod = errors.New("unexpected token signing method")
+	ErrInvalidToken            = errors.New("invalid token")
+	ErrInvalidTokenClaims      = errors.New("invalid token claims")
 )
 
 // UserClaims is a custom JWT claims that contains some user's information
@@ -59,19 +65,19 @@ func (m *JwtManager) Verify(accessToken string) (*UserClaims, error) {
 	token, err := jwt.ParseWithClaims(accessToken, &UserClaims{},
 		func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				return nil, fmt.Errorf("unexpected token signing method")
+				return nil, ErrUnexpectedSigningMethod
 			}
 			return []byte(m.sercetKey), nil
 		},
 	)
 
 	if err != nil {
-		return nil, fmt.Errorf("invalid token: %w", err)
+		return nil, errors.New(ErrInvalidToken.Error() + ": " + err.Error())
 	}
 
 	claims, ok := token.Claims.(*UserClaims)
 	if !ok {
-		return nil, fmt.Errorf("invalid token claims")
+		return nil, ErrInvalidTokenClaims
 	}
 
 	return claims, nil

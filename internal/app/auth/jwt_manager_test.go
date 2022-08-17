@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"errors"
 	"lms/config"
 	"lms/internal/domain/user"
 	"lms/internal/pkg/sample"
@@ -32,7 +33,7 @@ func TestJWTManager_Generate(t *testing.T) {
 		wantVerHasErr bool
 	}{
 		{
-			name:          "verified/permitted user",
+			name:          "verified and permitted user",
 			user:          sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, true, false),
 			wantGenErr:    nil,
 			wantVerHasErr: false,
@@ -60,27 +61,32 @@ func TestJWTManager_Generate(t *testing.T) {
 }
 
 func TestJWTManager_Verify(t *testing.T) {
+
 	cfg := config.JWT{SecretKey: "secret", TTL: 20 * time.Minute}
 
 	jwtManager := NewJwtManager(cfg)
-
-	testCases := []struct {
-		name       string
-		token      string
-		wantHasErr bool
-	}{
-		{
-			name:       "empty access token",
-			token:      "",
-			wantHasErr: true,
-		},
+	usr := sample.NewFakeUserEntity(user.USER_TYPE_TEACHER, true, false)
+	token, err := jwtManager.Generate(&usr)
+	if err != nil {
+		t.Fatal(err)
+	}
+	usrClaims, verErr := jwtManager.Verify(token)
+	assert.Empty(t, verErr)
+	if verErr == nil {
+		assert.Equal(t, usr.ID.String(), usrClaims.ID)
+		assert.Equal(t, usr.Username, usrClaims.Username)
 	}
 
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			_, gotErr := jwtManager.Verify(tc.token)
-			assert.Equal(t, tc.wantHasErr, gotErr != nil)
-			//TODO: check some details of got claims...
-		})
+	// generate a malicious token!
+	malConfig := config.JWT{SecretKey: "malicious", TTL: 2000 * time.Minute}
+	malJwtTool := NewJwtManager(malConfig)
+	malUser := usr
+	malUser.Type = user.USER_TYPE_ADMIN
+	malToken, malErr := malJwtTool.Generate(&malUser)
+	if malErr != nil {
+		t.Fatal(malErr)
 	}
+	_, malVerErr := jwtManager.Verify(malToken)
+	assert.NotEmpty(t, malVerErr)
+	assert.Equal(t, errors.New(ErrInvalidToken.Error()+": "+"signature is invalid"), malVerErr)
 }
