@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
+	"time"
 )
 
 var (
@@ -16,8 +17,14 @@ type Server struct {
 	Port int    `json:"port"`
 }
 
+type JWT struct {
+	SecretKey string        `json:"secret_key"`
+	TTL       time.Duration `json:"ttl_minute"`
+}
+
 type Config struct {
 	Server `json:"server"`
+	JWT    `json:"jwt"`
 }
 
 func Parse(path string) (*Config, error) {
@@ -30,6 +37,6 @@ func Parse(path string) (*Config, error) {
 	if err := json.Unmarshal(file, &config); err != nil {
 		return nil, ErrFailedToUnmarshal
 	}
-
+	config.JWT.TTL *= time.Minute
 	return &config, nil
 }

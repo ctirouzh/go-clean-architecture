@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -34,6 +35,10 @@ func TestConfig_Parse(t *testing.T) {
 					Server: Server{
 						Host: "127.0.0.1",
 						Port: 3000,
+					},
+					JWT: JWT{
+						SecretKey: "your_secret_key",
+						TTL:       20 * time.Minute,
 					},
 				},
 			},
