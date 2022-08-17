@@ -11,6 +11,14 @@ type SignUpRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type SingInRequest struct {
+	Username string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+type SignInResponse struct {
+	AccessToken string `json:"access_token"`
+}
 type UserDTO struct {
 	ID        string    `json:"id"`
 	Username  string    `json:"username"`

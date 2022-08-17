@@ -1,11 +1,16 @@
 package controller
 
 import (
+	"errors"
 	"lms/internal/app/auth"
 	"lms/internal/domain/user"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+)
+
+var (
+	ErrInvalidUsernameOrPassword = errors.New("invalid username or password")
 )
 
 type Auth struct {
@@ -36,5 +41,22 @@ func (ctrl *Auth) SignUp(c *gin.Context) {
 
 	var res UserDTO
 	res.Prepare(*usr)
+	c.JSON(http.StatusOK, gin.H{"data": res})
+}
+
+func (ctrl *Auth) SignIn(c *gin.Context) {
+	var req SingInRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	token, err := ctrl.authService.SignIn(req.Username, req.Password)
+	if err != nil {
+		c.AbortWithError(http.StatusUnauthorized, ErrInvalidUsernameOrPassword)
+	}
+	res := SignInResponse{
+		AccessToken: token,
+	}
 	c.JSON(http.StatusOK, gin.H{"data": res})
 }

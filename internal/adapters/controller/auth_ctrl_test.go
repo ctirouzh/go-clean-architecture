@@ -6,6 +6,8 @@ import (
 	"lms/config"
 	"lms/internal/adapters/repository/memory"
 	"lms/internal/app/auth"
+	"lms/internal/domain/user"
+	"lms/internal/pkg/sample"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -19,10 +21,10 @@ import (
 func TestAuthController_SignUp(t *testing.T) {
 	// Prepare auth controller dependencies.
 	userRepo := memory.NewUserRepo()
-	jwtManager := auth.NewJwtManager(config.JWT{SecretKey: "secret", TTL: time.Minute})
+	jwtManager := auth.NewJwtManager(config.JWT{SecretKey: "secret_key", TTL: time.Minute})
 	authService := auth.NewService(userRepo, jwtManager)
 	authCtrl := NewAuthController(authService)
-	// testCases: TODO--> Consider EmailAlreadyTaken and UsernameAlreadyTaken errors
+	// Test Cases: TODO--> Consider EmailAlreadyTaken and UsernameAlreadyTaken errors
 	testCases := []struct {
 		name string
 		form SignUpRequest
@@ -102,6 +104,84 @@ func TestAuthController_SignUp(t *testing.T) {
 				}
 				assert.Equal(t, tc.form.Username, got["data"].Username)
 				assert.Equal(t, tc.form.Email, got["data"].Email)
+			}
+		})
+	}
+}
+
+func TestAuthController_SignIn(t *testing.T) {
+	// use domain user.Repository Interface mock implementation
+	validUser := sample.NewFakeUserEntity(user.USER_TYPE_STUDENT, true, false)
+	unverifiedUser := sample.NewFakeUserEntity(user.USER_TYPE_TEACHER, false, false)
+	bannedUser := sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, true, true)
+
+	users := make(map[uuid.UUID]*user.User)
+	users[validUser.ID] = &validUser
+	users[unverifiedUser.ID] = &unverifiedUser
+	users[bannedUser.ID] = &bannedUser
+
+	userRepo := user.NewMockRepository(users)
+	jwtManager := auth.NewJwtManager(config.JWT{SecretKey: "secret_key", TTL: time.Minute})
+	authService := auth.NewService(userRepo, jwtManager)
+	authController := NewAuthController(authService)
+	// SignIn Test Cases:
+	testCases := []struct {
+		name string
+		form SingInRequest
+		want int
+	}{
+		{
+			name: "valid user",
+			form: SingInRequest{validUser.Username, "secret"},
+			want: http.StatusOK,
+		}, {
+			name: "valid user with empty username and password",
+			form: SingInRequest{"", ""},
+			want: http.StatusBadRequest,
+		},
+		{
+			name: "valid user with incorrect password",
+			form: SingInRequest{validUser.Username, "invalid"},
+			want: http.StatusUnauthorized,
+		},
+		{
+			name: "valid user with incorrect username",
+			form: SingInRequest{"invalid", "secret"},
+			want: http.StatusUnauthorized,
+		},
+		{
+			name: "unverified user with correct username and password",
+			form: SingInRequest{unverifiedUser.Username, "secret"},
+			want: http.StatusUnauthorized,
+		},
+		{
+			name: "banned user with correct username and password",
+			form: SingInRequest{bannedUser.Username, "secret"},
+			want: http.StatusUnauthorized,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Prepare context
+			w := httptest.NewRecorder()
+			ctx, _ := gin.CreateTestContext(w)
+
+			jsonForm, _ := json.Marshal(tc.form)
+			ctx.Request = httptest.NewRequest("POST", "/", bytes.NewBuffer(jsonForm))
+
+			authController.SignIn(ctx)
+			assert.Equal(t, tc.want, w.Code)
+
+			if w.Code == http.StatusOK {
+				var got map[string]SignInResponse
+				if err := json.Unmarshal(w.Body.Bytes(), &got); err != nil {
+					t.Fatal(err)
+				}
+				data, dataExist := got["data"]
+				if !dataExist {
+					t.Fatal("key \"data\" not exist in json response")
+				}
+				assert.NotEmpty(t, data.AccessToken)
 			}
 		})
 	}
