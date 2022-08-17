@@ -32,15 +32,23 @@ func NewJwtManager(config config.JWT) *JwtManager {
 }
 
 // Generate generates and signs new access token for a user.
-func (m *JwtManager) Generate(user *user.User) (string, error) {
+func (m *JwtManager) Generate(usr *user.User) (string, error) {
+
+	if !usr.IsVerified() {
+		return "", user.ErrUserNotVerified
+	}
+	if usr.IsBanned() {
+		return "", user.ErrBannedUser
+	}
+
 	claims := UserClaims{
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(m.ttl).Unix(),
 			IssuedAt:  time.Now().Unix(),
 		},
-		ID:       user.ID.String(),
-		Username: user.Username,
-		Type:     user.Type.String(),
+		ID:       usr.ID.String(),
+		Username: usr.Username,
+		Type:     usr.Type.String(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(m.sercetKey))
