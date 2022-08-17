@@ -10,8 +10,6 @@ import (
 
 var (
 	ErrEmptyUserPassword = errors.New("password cannot be empty")
-	ErrUserNotVerified   = errors.New("user not verified")
-	ErrBannedUser        = errors.New("user is banned")
 )
 
 type User struct {

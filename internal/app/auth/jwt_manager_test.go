@@ -40,12 +40,12 @@ func TestJWTManager_Generate(t *testing.T) {
 		}, {
 			name:          "unverified user",
 			user:          sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, false, false),
-			wantGenErr:    user.ErrUserNotVerified,
+			wantGenErr:    ErrUserNotVerified,
 			wantVerHasErr: true,
 		}, {
 			name:          "verified/banned user",
 			user:          sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, true, true),
-			wantGenErr:    user.ErrBannedUser,
+			wantGenErr:    ErrBannedUser,
 			wantVerHasErr: true,
 		},
 	}
