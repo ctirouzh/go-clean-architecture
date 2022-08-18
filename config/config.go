@@ -22,9 +22,18 @@ type JWT struct {
 	TTL       time.Duration `json:"ttl_minute"`
 }
 
+type Postgres struct {
+	Host string `json:"host"`
+	Port int    `json:"port"`
+	User string `json:"user"`
+	Pass string `json:"pass"`
+	Name string `json:"name"`
+}
+
 type Config struct {
-	Server `json:"server"`
-	JWT    `json:"jwt"`
+	Server   `json:"server"`
+	JWT      `json:"jwt"`
+	Postgres `json:"postgres"`
 }
 
 func Parse(path string) (*Config, error) {

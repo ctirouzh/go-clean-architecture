@@ -1,6 +1,8 @@
 package config
 
 import (
+	"errors"
+	"io/fs"
 	"os"
 	"testing"
 	"time"
@@ -26,9 +28,9 @@ func TestConfig_Parse(t *testing.T) {
 		want         Want
 	}{
 		{
-			name:         "unmarshal config.json file",
+			name:         "unmarshal example.config.json file",
 			relativePath: "./",
-			fileName:     "config.json",
+			fileName:     "example.config.json",
 			want: Want{
 				err: nil,
 				config: &Config{
@@ -39,6 +41,13 @@ func TestConfig_Parse(t *testing.T) {
 					JWT: JWT{
 						SecretKey: "your_secret_key",
 						TTL:       20 * time.Minute,
+					},
+					Postgres: Postgres{
+						Host: "localhost",
+						Port: 5432,
+						User: "postgres",
+						Pass: "your_db_password",
+						Name: "your_db_name",
 					},
 				},
 			},
@@ -70,4 +79,9 @@ func TestConfig_Parse(t *testing.T) {
 		})
 	}
 
+}
+
+func TestConfig_ConfigFileExists(t *testing.T) {
+	_, err := os.Stat("config.json")
+	assert.Falsef(t, errors.Is(err, fs.ErrNotExist), "config.json file not exists")
 }
