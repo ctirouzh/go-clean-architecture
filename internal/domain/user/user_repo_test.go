@@ -48,12 +48,12 @@ func TestUserRepoMock_Get(t *testing.T) {
 		want error
 	}{
 		{
-			name: "should find user",
+			name: "should retrieve user",
 			id:   usr.ID,
 			want: nil,
 		},
 		{
-			name: "try to find a non-existing user",
+			name: "try to retrieve a non-existing user",
 			id:   uuid.New(),
 			want: ErrUserNotFound,
 		},
