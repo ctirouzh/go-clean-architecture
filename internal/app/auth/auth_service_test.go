@@ -3,7 +3,6 @@ package auth
 import (
 	"lms/config"
 	"lms/internal/domain/user"
-	"lms/internal/pkg/sample"
 	"testing"
 	"time"
 
@@ -27,8 +26,8 @@ func TestAuthService_SignUp(t *testing.T) {
 	jwtManager := NewJwtManager(config.JWT{SecretKey: "secret", TTL: time.Minute})
 	authService := NewService(userRepo, jwtManager)
 
-	username := sample.NewFakeUsername()
-	email := sample.NewFakeEmail()
+	username := "test_username"
+	email := "test@test.io"
 	password := "secret"
 	usr, err := authService.SignUp(username, email, password)
 
@@ -47,7 +46,7 @@ func TestAuthService_SignUp(t *testing.T) {
 
 func TestAuthService_SignIn(t *testing.T) {
 	// use domain user.Repository Interface mock implementation
-	usr := sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, true, false)
+	usr := user.NewVerifiedUser(user.USER_TYPE_ADMIN)
 	userRepo := user.NewMockRepository()
 	userRepo.AddUsers([]*user.User{&usr})
 	jwtManager := NewJwtManager(config.JWT{SecretKey: "secret_key", TTL: time.Minute})

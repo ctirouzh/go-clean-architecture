@@ -4,7 +4,6 @@ import (
 	"errors"
 	"lms/config"
 	"lms/internal/domain/user"
-	"lms/internal/pkg/sample"
 	"testing"
 	"time"
 
@@ -34,7 +33,7 @@ func TestJWTManager_Generate(t *testing.T) {
 	}{
 		{
 			name:          "valid user",
-			user:          sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, true, false),
+			user:          user.NewVerifiedUser(user.USER_TYPE_ADMIN),
 			wantGenErr:    nil,
 			wantVerHasErr: false,
 		},
@@ -56,7 +55,7 @@ func TestJWTManager_Verify(t *testing.T) {
 	cfg := config.JWT{SecretKey: "secret", TTL: 20 * time.Minute}
 
 	jwtManager := NewJwtManager(cfg)
-	usr := sample.NewFakeUserEntity(user.USER_TYPE_TEACHER, true, false)
+	usr := user.NewVerifiedUser(user.USER_TYPE_TEACHER)
 	token, err := jwtManager.Generate(&usr)
 	if err != nil {
 		t.Fatal(err)

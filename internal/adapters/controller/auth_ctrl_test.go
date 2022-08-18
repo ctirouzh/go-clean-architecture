@@ -7,7 +7,6 @@ import (
 	"lms/internal/adapters/repository/memory"
 	"lms/internal/app/auth"
 	"lms/internal/domain/user"
-	"lms/internal/pkg/sample"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -111,9 +110,9 @@ func TestAuthController_SignUp(t *testing.T) {
 
 func TestAuthController_SignIn(t *testing.T) {
 	// use domain user.Repository Interface mock implementation
-	validUser := sample.NewFakeUserEntity(user.USER_TYPE_STUDENT, true, false)
-	unverifiedUser := sample.NewFakeUserEntity(user.USER_TYPE_TEACHER, false, false)
-	bannedUser := sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, true, true)
+	validUser := user.NewVerifiedUser(user.USER_TYPE_STUDENT)
+	unverifiedUser := user.NewUser(user.USER_TYPE_TEACHER)
+	bannedUser := user.NewBannedUser(user.USER_TYPE_ADMIN)
 
 	userRepo := user.NewMockRepository()
 	userRepo.AddUsers([]*user.User{&validUser, &unverifiedUser, &bannedUser})
