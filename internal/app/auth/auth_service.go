@@ -33,6 +33,7 @@ func (service *Service) SignUp(username, email, password string) (*user.User, er
 func (service *Service) SignIn(username, password string) (string, error) {
 	usr, findErr := service.userRepo.GetByUsername(username)
 	if findErr != nil {
+		// user not found
 		return "", findErr
 	}
 	if !usr.IsVerified() {

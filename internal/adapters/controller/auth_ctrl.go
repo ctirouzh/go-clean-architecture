@@ -54,9 +54,8 @@ func (ctrl *Auth) SignIn(c *gin.Context) {
 	token, err := ctrl.authService.SignIn(req.Username, req.Password)
 	if err != nil {
 		c.AbortWithError(http.StatusUnauthorized, ErrInvalidUsernameOrPassword)
+		return
 	}
-	res := SignInResponse{
-		AccessToken: token,
-	}
-	c.JSON(http.StatusOK, gin.H{"data": res})
+
+	c.JSON(http.StatusOK, gin.H{"data": SignInResponse{AccessToken: token}})
 }

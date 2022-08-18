@@ -115,12 +115,8 @@ func TestAuthController_SignIn(t *testing.T) {
 	unverifiedUser := sample.NewFakeUserEntity(user.USER_TYPE_TEACHER, false, false)
 	bannedUser := sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, true, true)
 
-	users := make(map[uuid.UUID]*user.User)
-	users[validUser.ID] = &validUser
-	users[unverifiedUser.ID] = &unverifiedUser
-	users[bannedUser.ID] = &bannedUser
-
-	userRepo := user.NewMockRepository(users)
+	userRepo := user.NewMockRepository()
+	userRepo.AddUsers([]*user.User{&validUser, &unverifiedUser, &bannedUser})
 	jwtManager := auth.NewJwtManager(config.JWT{SecretKey: "secret_key", TTL: time.Minute})
 	authService := auth.NewService(userRepo, jwtManager)
 	authController := NewAuthController(authService)
@@ -131,10 +127,11 @@ func TestAuthController_SignIn(t *testing.T) {
 		want int
 	}{
 		{
-			name: "valid user",
+			name: "valid user (verified and permitted)",
 			form: SingInRequest{validUser.Username, "secret"},
 			want: http.StatusOK,
-		}, {
+		},
+		{
 			name: "valid user with empty username and password",
 			form: SingInRequest{"", ""},
 			want: http.StatusBadRequest,

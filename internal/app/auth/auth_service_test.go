@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,7 +23,7 @@ func TestAuthService_NewService(t *testing.T) {
 
 func TestAuthService_SignUp(t *testing.T) {
 	// use domain user.Repository Interface mock implementation
-	userRepo := user.NewMockRepository(make(map[uuid.UUID]*user.User))
+	userRepo := user.NewMockRepository()
 	jwtManager := NewJwtManager(config.JWT{SecretKey: "secret", TTL: time.Minute})
 	authService := NewService(userRepo, jwtManager)
 
@@ -48,10 +47,9 @@ func TestAuthService_SignUp(t *testing.T) {
 
 func TestAuthService_SignIn(t *testing.T) {
 	// use domain user.Repository Interface mock implementation
-	users := make(map[uuid.UUID]*user.User)
 	usr := sample.NewFakeUserEntity(user.USER_TYPE_ADMIN, true, false)
-	users[usr.ID] = &usr
-	userRepo := user.NewMockRepository(users)
+	userRepo := user.NewMockRepository()
+	userRepo.AddUsers([]*user.User{&usr})
 	jwtManager := NewJwtManager(config.JWT{SecretKey: "secret_key", TTL: time.Minute})
 	authService := NewService(userRepo, jwtManager)
 
