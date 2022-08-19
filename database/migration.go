@@ -1,6 +1,7 @@
 package database
 
 import (
+	"lms/internal/domain/user"
 	"log"
 
 	"gorm.io/gorm"
@@ -12,8 +13,7 @@ var models = []interface{}{
 	// 1. Add gorm tag to domain entities and use them as a orm model here,
 	// 2. Define new models here and use them.
 
-	// &user.User{},
-
+	&user.User{},
 }
 
 // Migrate calls Automigrate method of the given gorm db for all database models.

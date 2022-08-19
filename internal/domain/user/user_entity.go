@@ -13,13 +13,13 @@ var (
 )
 
 type User struct {
-	ID           uuid.UUID
-	Username     string
-	Email        string
-	Type         UserType
-	passwordHash string
-	Verified     bool
-	Banned       bool
+	ID           uuid.UUID `gorm:"primaryKey"`
+	Username     string    `gorm:"uniqueIndex;not null;size:32;default:null"`
+	Email        string    `gorm:"uniqueIndex;not null;size:42;default:null"`
+	Type         UserType  `gorm:"index;size:1;default:3"`
+	passwordHash string    `gorm:"not null;size:64;default:null"`
+	Verified     bool      `gorm:"default:false"`
+	Banned       bool      `gorm:"default:false"`
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }

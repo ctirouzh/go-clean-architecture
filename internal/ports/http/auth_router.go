@@ -9,4 +9,5 @@ import (
 func InitAuthRouter(r *gin.Engine, ctrl *controller.Auth) {
 	auth := r.Group("/api/auth")
 	auth.POST("/signup", ctrl.SignUp)
+	auth.POST("/signin", ctrl.SignIn)
 }
