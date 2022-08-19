@@ -1,4 +1,4 @@
-package postgres
+package database
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Connect(cfg config.Postgres) (*gorm.DB, error) {
+func ConnectToPostgres(cfg config.Postgres) (*gorm.DB, error) {
 
 	log.Printf(
 		"PSQL_HOST:%s PSQL_PORT:%d PSQL_USER:%s PSQL_NAME:%s",
@@ -24,6 +24,5 @@ func Connect(cfg config.Postgres) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Println("postgres connected...")
 	return db, nil
 }

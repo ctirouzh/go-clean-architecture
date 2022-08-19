@@ -5,8 +5,9 @@ import (
 	"log"
 
 	"lms/config"
+	"lms/database"
 	"lms/internal/adapters/controller"
-	"lms/internal/adapters/repository/memory"
+	"lms/internal/adapters/repository/postgres"
 	"lms/internal/app/auth"
 	"lms/internal/ports/http"
 
@@ -14,16 +15,26 @@ import (
 )
 
 func main() {
+
 	cfg, cfgErr := config.Parse("./config/config.json")
 	if cfgErr != nil {
 		log.Fatal("failed to load config file", cfgErr)
 	}
+	// Prepare database connenction
+	db, dbErr := database.ConnectToPostgres(cfg.Postgres)
+	if dbErr != nil {
+		log.Fatal(dbErr)
+	}
+	log.Println("postgres connected...")
+	database.Migrate(db)
 
-	userRepo := memory.NewUserRepo()
+	// Prepare auth controller dependencies
+	userRepo := postgres.NewUserRepo(db)
 	jwtManager := auth.NewJwtManager(cfg.JWT)
 	authService := auth.NewService(userRepo, jwtManager)
 	authCtrl := controller.NewAuthController(authService)
 
+	// Initialize gin framework engine
 	r := gin.Default()
 	http.InitAuthRouter(r, authCtrl)
 
