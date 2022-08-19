@@ -30,6 +30,7 @@ func (ur *UserRepo) Get(id uuid.UUID) (*user.User, error) {
 	return nil, user.ErrUserNotFound
 }
 
+// GetByUsername finds a user by username
 func (ur *UserRepo) GetByUsername(username string) (*user.User, error) {
 	ur.mutex.RLock()
 	defer ur.mutex.RUnlock()
@@ -62,6 +63,7 @@ func (ur *UserRepo) Create(username, email, password string, userType user.UserT
 	return newUser, nil
 }
 
+// Delete removes a user from the memory repository
 func (ur *UserRepo) Delete(id uuid.UUID) error {
 	usr, err := ur.Get(id)
 	if err != nil {
