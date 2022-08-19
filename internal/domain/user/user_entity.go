@@ -17,7 +17,7 @@ type User struct {
 	Username     string    `gorm:"uniqueIndex;not null;size:32;default:null"`
 	Email        string    `gorm:"uniqueIndex;not null;size:42;default:null"`
 	Type         UserType  `gorm:"index;size:1;default:3"`
-	passwordHash string    `gorm:"not null;size:64;default:null"`
+	PasswordHash string    `gorm:"not null;size:64;default:null"`
 	Verified     bool      `gorm:"default:false"`
 	Banned       bool      `gorm:"default:false"`
 	CreatedAt    time.Time
@@ -52,12 +52,12 @@ func (user *User) SetPassword(password string) error {
 	if err != nil {
 		return err
 	}
-	user.passwordHash = string(b)
+	user.PasswordHash = string(b)
 	return nil
 }
 
 func (user User) IsPasswordVerified(password string) bool {
-	return bcrypt.CompareHashAndPassword([]byte(user.passwordHash), []byte(password)) == nil
+	return bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) == nil
 }
 
 func (user *User) PrepareForCreate() {

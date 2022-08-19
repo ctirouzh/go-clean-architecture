@@ -9,10 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	ErrInvalidUsernameOrPassword = errors.New("invalid username or password")
-)
-
 type Auth struct {
 	authService *auth.Service
 }
@@ -32,7 +28,7 @@ func (ctrl *Auth) SignUp(c *gin.Context) {
 	usr, err := ctrl.authService.SignUp(req.Username, req.Email, req.Password)
 	if err != nil {
 		status := http.StatusInternalServerError
-		if err == user.ErrEmailAlreadyTaken || err == user.ErrUsernameAlreadyTaken {
+		if errors.Is(err, user.ErrUsernameOrEmailAlreadyTaken) {
 			status = http.StatusConflict
 		}
 		c.AbortWithError(status, err)
@@ -53,7 +49,7 @@ func (ctrl *Auth) SignIn(c *gin.Context) {
 
 	token, err := ctrl.authService.SignIn(req.Username, req.Password)
 	if err != nil {
-		c.AbortWithError(http.StatusUnauthorized, ErrInvalidUsernameOrPassword)
+		c.AbortWithError(http.StatusUnauthorized, err)
 		return
 	}
 

@@ -145,11 +145,11 @@ func TestAuthController_SignIn(t *testing.T) {
 			form: SingInRequest{"invalid", "secret"},
 			want: http.StatusUnauthorized,
 		},
-		{
-			name: "unverified user with correct username and password",
-			form: SingInRequest{unverifiedUser.Username, "secret"},
-			want: http.StatusUnauthorized,
-		},
+		// {
+		// 	name: "unverified user with correct username and password",
+		// 	form: SingInRequest{unverifiedUser.Username, "secret"},
+		// 	want: http.StatusUnauthorized,
+		// },
 		{
 			name: "banned user with correct username and password",
 			form: SingInRequest{bannedUser.Username, "secret"},

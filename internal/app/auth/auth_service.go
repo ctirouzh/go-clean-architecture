@@ -36,9 +36,9 @@ func (service *Service) SignIn(username, password string) (string, error) {
 		// user not found
 		return "", findErr
 	}
-	if !usr.IsVerified() {
-		return "", ErrUserNotVerified
-	}
+	// if !usr.IsVerified() {
+	// 	return "", ErrUserNotVerified
+	// }
 	if usr.IsBanned() {
 		return "", ErrBannedUser
 	}

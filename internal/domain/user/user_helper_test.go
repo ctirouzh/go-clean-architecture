@@ -40,7 +40,7 @@ func assertNotEmptyUser(t *testing.T, usr User) {
 	assert.NotEmpty(t, usr.ID.String())
 	assert.NotEmpty(t, usr.Username)
 	assert.NotEmpty(t, usr.Email)
-	assert.NotEmpty(t, usr.passwordHash)
+	assert.NotEmpty(t, usr.PasswordHash)
 	assert.NotEmpty(t, usr.CreatedAt)
 	assert.NotEmpty(t, usr.UpdatedAt)
 }
