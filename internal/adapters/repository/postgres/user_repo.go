@@ -45,7 +45,7 @@ func (repo *UserRepo) GetByUsername(username string) (*user.User, error) {
 // GetByUsernameOrEmail finds a user by username, or email
 func (repo *UserRepo) GetByUsernameOrEmail(username, email string) (*user.User, error) {
 	usr := &user.User{}
-	if err := repo.db.Where("username=? OR email=?", username).First(&usr).Error; err != nil {
+	if err := repo.db.Where("username=? OR email=?", username, email).First(&usr).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, user.ErrUserNotFound
 		}
