@@ -8,10 +8,10 @@ import (
 )
 
 func TestDatabase_ConnectToPostgres(t *testing.T) {
-	// To insure that a proper postgres config exists
+	// To ensure that a proper postgres config exists
 	cfg, cfgErr := config.Parse("../config/config.json")
 	assert.Empty(t, cfgErr)
-	// To insure that your config leads to a connection.
+	// To ensure that your config leads to a connection.
 	db, err := ConnectToPostgres(cfg.Postgres)
 	assert.Empty(t, err)
 	assert.NotEmpty(t, db)
@@ -20,7 +20,7 @@ func TestDatabase_ConnectToPostgres(t *testing.T) {
 func TestPostgres_PostgresConnectionError(t *testing.T) {
 	cfg, cfgErr := config.Parse("../config/example.config.json")
 	assert.Empty(t, cfgErr)
-	// To insure that a wrong config leads to a connection error.
+	// To ensure that a wrong config leads to a connection error.
 	db, err := ConnectToPostgres(cfg.Postgres)
 	assert.NotEmpty(t, err)
 	assert.Empty(t, db)
