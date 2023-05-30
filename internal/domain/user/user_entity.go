@@ -24,23 +24,23 @@ type User struct {
 	UpdatedAt    time.Time
 }
 
-func (user User) IsAdmin() bool {
+func (user *User) IsAdmin() bool {
 	return user.Type == USER_TYPE_ADMIN
 }
 
-func (user User) IsTeacher() bool {
+func (user *User) IsTeacher() bool {
 	return user.Type == USER_TYPE_TEACHER
 }
 
-func (user User) IsStudent() bool {
+func (user *User) IsStudent() bool {
 	return user.Type == USER_TYPE_STUDENT
 }
 
-func (user User) IsVerified() bool {
+func (user *User) IsVerified() bool {
 	return user.Verified
 }
 
-func (user User) IsBanned() bool {
+func (user *User) IsBanned() bool {
 	return user.Banned
 }
 
@@ -56,7 +56,7 @@ func (user *User) SetPassword(password string) error {
 	return nil
 }
 
-func (user User) IsPasswordVerified(password string) bool {
+func (user *User) IsPasswordVerified(password string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password)) == nil
 }
 
